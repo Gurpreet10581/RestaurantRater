@@ -14,6 +14,8 @@ namespace RestaurantRater.Controllers
     {
         private RestaurantDbContext _db = new RestaurantDbContext();// it is a snapshot of database
 
+        //Main Index method below some of it was default
+
         // GET: Restaurant /this is the index method
         public ActionResult Index()
         {
@@ -26,6 +28,8 @@ namespace RestaurantRater.Controllers
         {
             return View();
         }
+
+        //Create method below
 
         //POST: Restaurant/Create
         [HttpPost]
@@ -41,6 +45,8 @@ namespace RestaurantRater.Controllers
 
             return View(restaurant);//added the restaurant so it doesn't clears everything and instead it will take us back to the view.
         }
+
+        //Delete method below 
 
         //Get: Restaurant/Delete/{id}
         public ActionResult Delete(int? id)// adding int ?=nullable
@@ -61,13 +67,15 @@ namespace RestaurantRater.Controllers
         //POST: Restaurant/Delete/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id)//Make sure it is nullable
         {
             Restaurant restaurant = _db.Restaurants.Find(id);
             _db.Restaurants.Remove(restaurant);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        //Edit Method below
 
         //GET: Restaurant/Edit/{id}
         //get an id from the user
@@ -76,7 +84,7 @@ namespace RestaurantRater.Controllers
         //exceptions- if restaurant doens't exist
         //return the restaurant and the view if it does exist
 
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? id)//Make sure it is nullable
         {
             if (id== null)
             {
@@ -104,5 +112,24 @@ namespace RestaurantRater.Controllers
             }
             return View(restaurant);
         }
+
+        //Detail method below- it just needs get method and no need for post method since we just want detail
+
+        //GET: Restaurant/Details/{id}
+        public ActionResult Details(int? id)//Make sure it is nullable
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Restaurant restaurant = _db.Restaurants.Find(id);
+            if (restaurant == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(restaurant);
+        }
+
     }
 }
