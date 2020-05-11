@@ -1,7 +1,48 @@
-﻿
+﻿@model IEnumerable<RestaurantRater.Models.Restaurant>
+
+
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Restaurants";//populates the title properties from Shared view and _Layout.cshtml. We can change the Title and Index part which means giving it a new name.
 }
 
 <h2>List of Restaurants</h2>
+
+<p>
+    @Html.ActionLink("Rate a Restaurant", "Create")
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(Model=>Model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model=>Model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model=>Model.Rating)
+        </th>
+        <th></th>
+    </tr>
+    @foreach(var item in Model)//we are creating below logic for each restaurant from models so item=restaurant 
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem=>item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rating)
+            </td>
+            <td>
+                @Html.ActionLink("Change", "Edit", new { id = item.RestaurantID }) |
+                @Html.ActionLink("More Info", "Details", new { id = item.RestaurantID }) |
+                @Html.ActionLink("Remove", "Delete", new { id = item.RestaurantID }) |
+            </td>
+        </tr>
+    }
+</table>
 
