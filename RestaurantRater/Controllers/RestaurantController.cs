@@ -1,6 +1,7 @@
 ﻿using RestaurantRater.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -50,7 +51,7 @@ namespace RestaurantRater.Controllers
             }
 
             Restaurant restaurant = _db.Restaurants.Find(id);//finding restaurant in the database by its key id
-            if(restaurant== null)//if restaurant doesn't exists in the data base
+            if(restaurant== null)//if restaurant doesn't exist in the data base
             {
                 return HttpNotFound();
             }
@@ -66,6 +67,42 @@ namespace RestaurantRater.Controllers
             _db.Restaurants.Remove(restaurant);
             _db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        //GET: Restaurant/Edit/{id}
+        //get an id from the user
+        //handle if the id is null
+        //find a restaurant by that id
+        //exceptions- if restaurant doens't exist
+        //return the restaurant and the view if it does exist
+
+        public ActionResult Edit(int? id)
+        {
+            if (id== null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Restaurant restaurant = _db.Restaurants.Find(id);
+            if (restaurant== null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(restaurant);
+        }
+
+
+        //POST: Restaurant/Edit/{id}
+        [HttpPost]
+        public ActionResult Edit(Restaurant restaurant)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Entry(restaurant).State = EntityState.Modified;//find the entry on the table and excess its state and tell us it has been modified
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(restaurant);
         }
     }
 }
